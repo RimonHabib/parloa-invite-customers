@@ -22,6 +22,7 @@ describe('Distance Calculator', () => {
     // change unit to meter
     distance = await distanceCalculator.getDistance(start, end, { unit: 'm' });
     expect(Math.round(distance)).toBe(807);
+    expect(distanceCalculator.getOptions().unit).toBe('m');
   });
 
   it('Should throw an error', async () => {
@@ -34,3 +35,4 @@ describe('Distance Calculator', () => {
     await expect(distanceCalculator.getDistance(start, end)).rejects.toThrow();
   });
 });
+

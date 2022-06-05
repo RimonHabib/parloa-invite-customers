@@ -3,15 +3,7 @@ export type GeoPoint = {
   long: number;
 };
 
-type DistanceUnits =
-  | 'meter'
-  | 'm'
-  | 'kilometer'
-  | 'km'
-  | 'mile'
-  | 'mi'
-  | 'nauticalmile'
-  | 'nmi';
+type DistanceUnits = 'meter' | 'm' | 'kilometer' | 'km' | 'mile' | 'mi' | 'nauticalmile' | 'nmi';
 
 type DistanceOptions = {
   unit?: DistanceUnits;
@@ -53,11 +45,7 @@ export default class DistanceCalculator {
    * @param end: GeoPoint object, { lat: 1.2345, long: 1.2345 }
    * @returns number: distance between start and end geoPoint
    */
-  private async haversine(
-    start: GeoPoint,
-    end: GeoPoint,
-    unit: DistanceUnits = 'kilometer',
-  ) {
+  private async haversine(start: GeoPoint, end: GeoPoint, unit: DistanceUnits) {
     const lat1Radian = this.degreeToRadian(start.lat);
     const lat2Radian = this.degreeToRadian(end.lat);
     const latDeltaRadian = this.degreeToRadian(end.lat - start.lat);
@@ -81,11 +69,7 @@ export default class DistanceCalculator {
    * @param end
    * @param options
    */
-  public async getDistance(
-    start: GeoPoint,
-    end: GeoPoint,
-    options?: DistanceOptions,
-  ) {
+  public async getDistance(start: GeoPoint, end: GeoPoint, options?: DistanceOptions) {
     // Setting default options
     const defaultOptions: DistanceOptions = {
       unit: 'kilometer',
@@ -96,21 +80,12 @@ export default class DistanceCalculator {
     this.setOptions({ ...defaultOptions, ...options });
 
     // Throw error if lat, long is not a number
-    if (
-      isNaN(start.lat) ||
-      isNaN(start.long) ||
-      isNaN(end.lat) ||
-      isNaN(end.long)
-    ) {
+    if (isNaN(start.lat) || isNaN(start.long) || isNaN(end.lat) || isNaN(end.long)) {
       throw Error(`Invalid geolocation data input`);
     }
 
     // Return distance calculated with preffered method
-    return await this.methodMap[this.options.method].bind(this)(
-      start,
-      end,
-      this.options.unit,
-    );
+    return await this.methodMap[this.options.method].bind(this)(start, end, this.options.unit);
   }
 
   /**
