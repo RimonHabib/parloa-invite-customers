@@ -3,7 +3,15 @@ export type GeoPoint = {
   long: number;
 };
 
-type DistanceUnits = 'meter' | 'm' | 'kilometer' | 'km' | 'mile' | 'mi' | 'nauticalmile' | 'nmi';
+export type DistanceUnits =
+  | 'meter'
+  | 'm'
+  | 'kilometer'
+  | 'km'
+  | 'mile'
+  | 'mi'
+  | 'nauticalmile'
+  | 'nmi';
 
 type DistanceOptions = {
   unit?: DistanceUnits;
@@ -104,3 +112,4 @@ export default class DistanceCalculator {
     return this.options;
   }
 }
+

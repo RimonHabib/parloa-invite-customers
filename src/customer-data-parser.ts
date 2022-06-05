@@ -28,13 +28,13 @@ export default class CustomerDataPerser {
   }
 
   /**
-   * Parse data and pass to callback
+   * Parse data and pass to a callback
    * @param filePath
    * @param callback
    */
-  public async parse(filePath: string) {
+  public async parse(filePath: string, callback: Function) {
     if (!existsSync(filePath)) {
-      throw new Error(`Can not locate ${filePath}, \nPlease check if the file exists`);
+      throw new Error(`Can not locate ${filePath}, Please check if the file exists`);
     }
 
     const rl = readline.createInterface({
@@ -42,11 +42,10 @@ export default class CustomerDataPerser {
       crlfDelay: Infinity,
     });
 
-    const customers: Customer[] = [];
     for await (const line of rl) {
-      if (line.trim().length > 1) customers.push(this.fromText(line));
+      // Construct customer object for every non-empty line and passes to the callback
+      if (line.trim().length > 1) callback(this.fromText(line));
     }
-    return customers;
   }
 }
 
