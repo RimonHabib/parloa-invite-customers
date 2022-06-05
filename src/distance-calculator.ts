@@ -14,9 +14,9 @@ type DistanceUnits =
   | 'nmi';
 
 type DistanceOptions = {
-  unit: DistanceUnits;
+  unit?: DistanceUnits;
   // only haversine method is implemented, but keeping room for some other formula
-  method: 'haversine';
+  method?: 'haversine';
 };
 
 export default class DistanceCalculator {
@@ -42,7 +42,7 @@ export default class DistanceCalculator {
    * @param degree
    * @returns
    */
-  private degreeToRadian(degree: number): number {
+  private degreeToRadian(degree: number) {
     return (degree * Math.PI) / 180;
   }
 
@@ -57,7 +57,7 @@ export default class DistanceCalculator {
     start: GeoPoint,
     end: GeoPoint,
     unit: DistanceUnits = 'kilometer',
-  ): Promise<number> {
+  ) {
     const lat1Radian = this.degreeToRadian(start.lat);
     const lat2Radian = this.degreeToRadian(end.lat);
     const latDeltaRadian = this.degreeToRadian(end.lat - start.lat);
@@ -95,8 +95,18 @@ export default class DistanceCalculator {
     // Overriding default options with given options
     this.setOptions({ ...defaultOptions, ...options });
 
+    // Throw error if lat, long is not a number
+    if (
+      isNaN(start.lat) ||
+      isNaN(start.long) ||
+      isNaN(end.lat) ||
+      isNaN(end.long)
+    ) {
+      throw Error(`Invalid geolocation data input`);
+    }
+
     // Return distance calculated with preffered method
-    return await this.methodMap[this.options.method](
+    return await this.methodMap[this.options.method].bind(this)(
       start,
       end,
       this.options.unit,
