@@ -24,7 +24,7 @@ export default class Invite {
   ) {
     // set default options
     this.setOptions({
-      filePath: path.resolve(__dirname, './customers.txt'),
+      filePath: path.resolve(__dirname, '../', './data/customers.txt'),
       radius: 100,
       unit: 'kilometer',
       min: 0,
